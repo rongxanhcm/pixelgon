@@ -15,9 +15,16 @@ io.on("connection", (socket) => {
   socket.emit("remotePlayers", Object.values(players));
 
 
-  socket.on("playerUpdate", (data) => {
-    data.socketId = socket.id;
-    players[socket.id] = data;
+socket.on("playerUpdate", (data) => {
+  if (
+    typeof data.x !== "number" ||
+    typeof data.y !== "number" ||
+    typeof data.name !== "string" ||
+    !data.sprite
+  ) {
+    console.warn("❌ playerUpdate bị bỏ qua vì thiếu dữ liệu:", data);
+    return;
+  }
   io.emit("remotePlayers", Object.entries(players).map(([id, p]) => ({
   ...p,
   socketId: id
