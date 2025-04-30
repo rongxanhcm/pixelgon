@@ -25,6 +25,11 @@ socket.on("playerUpdate", (data) => {
     console.warn("❌ playerUpdate bị bỏ qua vì thiếu dữ liệu:", data);
     return;
   }
+    players[socket.id] = {
+    ...data,
+    socketId: socket.id
+  };
+    
   io.emit("remotePlayers", Object.entries(players).map(([id, p]) => ({
   ...p,
   socketId: id
