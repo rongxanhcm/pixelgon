@@ -18,7 +18,10 @@ io.on("connection", (socket) => {
   socket.on("playerUpdate", (data) => {
     data.socketId = socket.id;
     players[socket.id] = data;
-    io.emit("remotePlayers", Object.values(players));
+  io.emit("remotePlayers", Object.entries(players).map(([id, p]) => ({
+  ...p,
+  socketId: id
+})));
 
     // Gửi tất cả player khác về cho client này
     const others = Object.entries(players)
