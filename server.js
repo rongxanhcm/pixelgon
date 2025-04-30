@@ -15,14 +15,12 @@ io.on("connection", (socket) => {
 
   socket.on("playerUpdate", (data) => {
     players[socket.id] = data;
+    io.emit("remotePlayers", Object.values(players));
 
     // Gửi tất cả player khác về cho client này
     const others = Object.entries(players)
       .filter(([id]) => id !== socket.id)
       .map(([id, p]) => p);
-
-    socket.emit("remotePlayers", others);
-    socket.broadcast.emit("remotePlayers", [data]); // gửi player này cho mọi người khác
   });
 
   socket.on("disconnect", () => {
