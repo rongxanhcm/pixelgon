@@ -12,8 +12,11 @@ const players = {};
 
 io.on("connection", (socket) => {
   console.log("New player:", socket.id);
+  socket.emit("remotePlayers", Object.values(players));
+
 
   socket.on("playerUpdate", (data) => {
+    data.socketId = socket.id;
     players[socket.id] = data;
     io.emit("remotePlayers", Object.values(players));
 
